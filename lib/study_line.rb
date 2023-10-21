@@ -35,17 +35,40 @@ module StudyLine
     private
 
     def refresh_token
-      file_path = "/path/to/your/refresh_token.txt"  # Replace with the actual path to your refresh token file
+      file_path = "/path/to/your/refresh_token.txt"
       File.read(file_path).strip
     rescue Errno::ENOENT
       puts "Error: Token file not found."
       exit 1
     end
 
+    def access_token
+      file_path = "/path/to/your/access_token.txt"
+      File.read(file_path).strip
+    rescue Errno::ENOENT
+      nil
+    end
+
+    def refresh_access_token
+      new_access_token = get_new_access_token
+      file_path = "/path/to/your/access_token.txt"
+      
+      File.open(file_path, 'w') do |file|
+        file.write(new_access_token)
+      end
+    rescue => e
+      puts "Failed to refresh access token: #{e.message}"
+      exit 1
+    end
+
+    def get_new_access_token
+      # ... code to obtain a new access token using the refresh token
+    end
+
     def headers
       {
         'Content-Type' => 'application/json',
-        'Authorization' => "Bearer #{refresh_token}"
+        'Authorization' => "Bearer #{access_token || refresh_access_token}"
       }
     end
   end
