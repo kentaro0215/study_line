@@ -7,7 +7,7 @@ module StudyLine
   class CLI < Thor
     class Sender
       include HTTParty
-      BASE_URI = 'https://your-web-app.com/api'
+      BASE_URI = 'http://localhost:3000/dashboard'
     end
 
     desc "start", "Record the start time of study"
@@ -19,28 +19,35 @@ module StudyLine
         headers: headers
       )
       # Handle the response...
+      if response.success?
+        puts "Study session started successfully."
+      else
+        puts "Error: #{response['error']}"
+      end
     end
 
     desc "finish", "Record the finish time of study"
     def finish
-      end_time = Time.now
+      finish_time = Time.now
       response = Sender.post(
         "#{Sender::BASE_URI}/finish",
-        body: { end_time: end_time }.to_json,
+        body: { finish_time: finish_time }.to_json,
         headers: headers
       )
       # Handle the response...
+      if response.success?
+        puts "Study session ended successfully."
+      else
+        puts "Error: #{response['error']}"
+      end
+
     end
 
     private
 
     def user_token
-      file_path = "/path/to/your/user_token.txt"  # Replace with the actual path to your user token file
-      File.read(file_path).strip
-    rescue Errno::ENOENT
-      puts "Error: Token file not found."
-      exit 1
-    end
+      ENV['CUSTOM_TOKEN'] || (raise "Error: Token not found.")
+    end 
 
     def headers
       {
