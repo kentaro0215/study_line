@@ -7,15 +7,17 @@ module StudyLine
   class CLI < Thor
     class Sender
       include HTTParty
-      BASE_URI = 'http://localhost:3000/dashboard'
+      BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/dashboard/'
     end
 
     desc "start", "Record the start time of study"
+    method_option :tag, aliases: "-t", desc: "Tag for the study session"
     def start
       start_time = Time.now
+      tags = options[:tag] ? options[:tag].split(',') : []
       response = Sender.post(
         "#{Sender::BASE_URI}/start",
-        body: { start_time: start_time }.to_json,
+        body: { start_time: start_time, tags: tags  }.to_json,
         headers: headers
       )
       # Handle the response...
