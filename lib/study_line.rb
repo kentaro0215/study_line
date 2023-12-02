@@ -9,7 +9,6 @@ module StudyLine
       include HTTParty
       BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/dashboard/'
     end
-
     desc "start", "Record the start time of study"
     method_option :tag, aliases: "-t", desc: "Tag for the study session"
     def start
