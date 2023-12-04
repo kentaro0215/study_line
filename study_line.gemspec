@@ -34,8 +34,13 @@ Gem::Specification.new do |spec|
   end
   
   spec.bindir = "exe"
-  spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  # spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  spec.executables = ["sl"]
   spec.require_paths = ["lib"]
+
+    # 依存関係の追加（例えば、ThorやHTTPartyなど）
+    spec.add_dependency "thor"
+    spec.add_dependency "httparty"  
 
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
