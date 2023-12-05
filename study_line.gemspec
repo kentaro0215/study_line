@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
     f.match(%r{^(test|spec|features|.*\.gem)$})
   end
   
-  spec.bindir = "exe"
+  spec.bindir = "bin"
   # spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.executables = ["sl"]
   spec.require_paths = ["lib"]
