@@ -1,5 +1,0 @@
-#!/usr/bin/env ruby
-
-require_relative "../lib/study_line"
-
-StudyLine::CLI.start(ARGV)
