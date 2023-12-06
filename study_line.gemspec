@@ -35,7 +35,7 @@ Gem::Specification.new do |spec|
   
   spec.bindir = "bin"
   # spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
-  spec.executables = ["sl"]
+  spec.executables = ["stl"]
   spec.require_paths = ["lib"]
 
     # 依存関係の追加（例えば、ThorやHTTPartyなど）

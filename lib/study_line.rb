@@ -38,7 +38,7 @@ module StudyLine
       )
       # Handle the response...
       if response.success?
-        puts "Study session started successfully."
+        puts "Study session finished successfully."
       else
         error_message = response.parsed_response['error'] || 'Unknown error'
         puts "Error: #{error_message}"
