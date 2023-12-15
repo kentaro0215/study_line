@@ -8,7 +8,6 @@ module StudyLine
     class Sender
       include HTTParty
       BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/dashboard/'
-      # BASE_URI = 'http://localhost:3000/dashboard'
     end
     desc "start", "Record the start time of study"
     method_option :tag, aliases: "-t", desc: "Tag for the study session"
