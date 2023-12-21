@@ -11,7 +11,7 @@ module StudyLine
       # BASE_URI = 'http://localhost:3000/dashboard'
     end
     desc "start", "Record the start time of study"
-    method_option :tag, aliases: "-t", desc: "Tag for the study session"
+    method_option :tag, aliases: "-t", desc: "タグを作成オプション"
     def start
       start_time = Time.now
       tags = options[:tag] ? options[:tag].split(',') : []
