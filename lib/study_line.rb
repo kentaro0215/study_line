@@ -28,7 +28,7 @@ module StudyLine
       end
     end
 
-    desc "finish", "Record the finish time of study"
+    desc "finish", "学習セッションの開始に成功しました。"
     def finish
       finish_time = Time.now
       response = Sender.post(
@@ -38,7 +38,7 @@ module StudyLine
       )
       # Handle the response...
       if response.success?
-        puts "Study session finished successfully."
+        puts "学習の終了時間を記録します。"
       else
         error_message = response.parsed_response['message'] || 'Unknown error'
         puts "Error: #{error_message}"
