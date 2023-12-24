@@ -10,7 +10,7 @@ module StudyLine
       BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/dashboard/'
       # BASE_URI = 'http://localhost:3000/dashboard'
     end
-    desc "start", "Record the start time of study"
+    desc "start", "学習セッションの開始時間を記録します。"
     method_option :tag, aliases: "-t", desc: "タグを作成オプション"
     def start
       start_time = Time.now
@@ -22,13 +22,13 @@ module StudyLine
       )
       # Handle the response...
       if response.success?
-        puts "Study session started successfully."
+        puts "学習セッションの開始に成功しました。"
       else
         puts "Error: #{response['error']}"
       end
     end
 
-    desc "finish", "学習セッションの開始に成功しました。"
+    desc "finish", "学習セッションの終了時間を記録します。"
     def finish
       finish_time = Time.now
       response = Sender.post(
