@@ -7,8 +7,8 @@ module StudyLine
   class CLI < Thor
     class Sender
       include HTTParty
-      BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/dashboard/'
-      # BASE_URI = 'http://localhost:3000/dashboard'
+      BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/api/study_sessions'
+      # BASE_URI = 'http://localhost:3000/api/study_sessions'
     end
     desc "start", "学習セッションの開始時間を記録します。"
     method_option :tag, aliases: "-t", desc: "タグを作成オプション"
@@ -16,7 +16,7 @@ module StudyLine
       start_time = Time.now
       tags = options[:tag] ? options[:tag].split(',') : []
       response = Sender.post(
-        "#{Sender::BASE_URI}/start",
+        "#{Sender::BASE_URI}/create",
         body: { start_time: start_time, tags: tags  }.to_json,
         headers: headers
       )
@@ -32,7 +32,7 @@ module StudyLine
     def finish
       finish_time = Time.now
       response = Sender.post(
-        "#{Sender::BASE_URI}/finish",
+        "#{Sender::BASE_URI}/update",
         body: { finish_time: finish_time }.to_json,
         headers: headers
       )
