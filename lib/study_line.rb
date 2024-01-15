@@ -2,13 +2,23 @@
 
 require 'thor'
 require 'httparty'
+require 'dotenv'
+Dotenv.load
 
 module StudyLine
   class CLI < Thor
+      desc "configure TOKEN", "トークンを設定します。"
+      def configure(token)
+        File.open('.env', 'w') do |file|
+          file.puts "CUSTOM_TOKEN=#{token}"
+        end
+        puts "トークンが設定されました。"
+      end
+
     class Sender
       include HTTParty
-      BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/api/study_sessions'
-      # BASE_URI = 'http://localhost:3000/api/study_sessions'
+      # BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/api/study_sessions'
+      BASE_URI = 'http://localhost:3000/api/study_sessions'
     end
     desc "start", "学習セッションの開始時間を記録します。"
     method_option :tag, aliases: "-t", desc: "タグを作成オプション"
@@ -24,6 +34,7 @@ module StudyLine
       if response.success?
         puts "学習セッションの開始に成功しました。"
       else
+        error_message = response.parsed_response['error'] || response.parsed_response['message'] || 'Unknown error'
         puts "Error: #{response['error']}"
       end
     end
@@ -44,6 +55,11 @@ module StudyLine
         puts "Error: #{error_message}"
       end
 
+    end
+
+    desc "show_token", "保存されているトークンを表示します。"
+    def show
+      puts "現在のCUSTOM_TOKEN: #{ENV['CUSTOM_TOKEN'] || '未設定'}"
     end
 
     private
