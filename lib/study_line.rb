@@ -2,23 +2,23 @@
 
 require 'thor'
 require 'httparty'
-require 'dotenv'
-Dotenv.load
+require 'json'
+
+CONFIG_FILE = File.join(Dir.home, '.stl_config')
 
 module StudyLine
   class CLI < Thor
       desc "configure TOKEN", "トークンを設定します。"
       def configure(token)
-        File.open('.env', 'w') do |file|
-          file.puts "CUSTOM_TOKEN=#{token}"
-        end
+        config = { 'CUSTOM_TOKEN' => token }
+        File.write(CONFIG_FILE, config.to_json)
         puts "トークンが設定されました。"
       end
 
     class Sender
       include HTTParty
-      # BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/api/study_sessions'
-      BASE_URI = 'http://localhost:3000/api/study_sessions'
+      BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/api/study_sessions'
+      # BASE_URI = 'http://localhost:3000/api/study_sessions'
     end
     desc "start", "学習セッションの開始時間を記録します。"
     method_option :tag, aliases: "-t", desc: "タグを作成オプション"
@@ -59,14 +59,25 @@ module StudyLine
 
     desc "show_token", "保存されているトークンを表示します。"
     def show
-      puts "現在のCUSTOM_TOKEN: #{ENV['CUSTOM_TOKEN'] || '未設定'}"
+      if File.exist?(CONFIG_FILE)
+        config = JSON.parse(File.read(CONFIG_FILE))
+        puts "現在のCUSTOM_TOKEN: #{config['CUSTOM_TOKEN'] || '未設定'}"
+      else
+        puts "トークンは未設定です。"
+      end
     end
 
     private
 
     def user_token
-      ENV['CUSTOM_TOKEN'] || (raise "Error: Token not found.")
-    end 
+      if File.exist?(CONFIG_FILE)
+        config = JSON.parse(File.read(CONFIG_FILE))
+        config['CUSTOM_TOKEN'] || (raise "Error: Token not found.")
+      else
+        raise "Error: Token not found."
+      end
+    end
+
 
     def headers
       {
