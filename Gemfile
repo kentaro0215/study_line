@@ -11,4 +11,6 @@ gem "rspec", "~> 3.0"
 
 gem "rubocop", "~> 1.21"
 
-gem 'dotenv'
+gem "thor", "~> 1.1"
+
+gem "httparty", "~> 0.18"
