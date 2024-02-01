@@ -18,6 +18,7 @@ module StudyLine
     class Sender
       include HTTParty
       # BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/api/study_sessions'
+      
       BASE_URI = 'http://localhost:3000/api/study_sessions'
     end
     desc "start", "学習セッションの開始時間を記録します。"
