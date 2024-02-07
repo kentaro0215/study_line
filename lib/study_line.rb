@@ -5,6 +5,7 @@ require 'httparty'
 require 'json'
 
 CONFIG_FILE = File.join(Dir.home, '.stl_config')
+CONFIG_JSON = File.join(File.dirname(__FILE__), 'config.json') # config.jsonファイルのパスを指定
 
 module StudyLine
   class CLI < Thor
@@ -19,7 +20,12 @@ module StudyLine
       include HTTParty
       # BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/api/study_sessions'
       
-      BASE_URI = 'http://localhost:3000/api/study_sessions'
+      # BASE_URI = 'http://localhost:3000/api/study_sessions'
+      def self.base_uri
+        env = ENV['APP_ENV'] || 'development' # 環境変数 APP_ENV を読み込む、未設定の場合は 'development'
+        config = JSON.parse(File.read(CONFIG_JSON))
+        config[env]['BASE_URI'] # 環境に応じた BASE_URI を返す
+      end
     end
     desc "start", "学習セッションの開始時間を記録します。"
     method_option :tag, aliases: "-t", desc: "タグを作成オプション"
