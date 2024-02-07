@@ -5,21 +5,28 @@ require 'httparty'
 require 'json'
 
 CONFIG_FILE = File.join(Dir.home, '.stl_config')
+CONFIG_JSON = File.join(File.dirname(__FILE__), 'config.json') # config.jsonファイルのパスを指定
 
 module StudyLine
   class CLI < Thor
-      desc "configure TOKEN", "トークンを設定します。"
-      def configure(token)
-        config = { 'CUSTOM_TOKEN' => token }
-        File.write(CONFIG_FILE, config.to_json)
-        puts "トークンが設定されました。"
-      end
+    desc "configure TOKEN [BASE_URL]", "トークンを設定し、オプショナルでベースURLも設定します。"
+    def configure(token, base_url = nil)
+      config = { 'CUSTOM_TOKEN' => token }
+      config['BASE_URL'] = base_url unless base_url.nil? || base_url.empty?
+      File.write(CONFIG_FILE, config.to_json)
+      puts "トークン#{'とベースURL' if base_url}が設定されました。"
+    end
+    
 
     class Sender
       include HTTParty
-      # BASE_URI = 'https://studyline-cc21ae1829fc.herokuapp.com/api/study_sessions'
-      
-      BASE_URI = 'http://localhost:3000/api/study_sessions'
+      def self.base_uri
+        if File.exist?(CONFIG_FILE)
+          config = JSON.parse(File.read(CONFIG_FILE))
+          config['BASE_URL']
+        end
+      end
+    
     end
     desc "start", "学習セッションの開始時間を記録します。"
     method_option :tag, aliases: "-t", desc: "タグを作成オプション"
@@ -27,7 +34,7 @@ module StudyLine
       start_time = Time.now
       tags = options[:tag] ? options[:tag].split(',') : []
       response = Sender.post(
-        "#{Sender::BASE_URI}/create",
+        "#{Sender.base_uri}/create",
         body: { start_time: start_time, tags: tags  }.to_json,
         headers: headers
       )
@@ -44,7 +51,7 @@ module StudyLine
     def finish
       finish_time = Time.now
       response = Sender.post(
-        "#{Sender::BASE_URI}/update",
+        "#{Sender.base_uri}/update",
         body: { finish_time: finish_time }.to_json,
         headers: headers
       )
