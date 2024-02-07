@@ -1,8 +1,0 @@
-{
-  "development": {
-    "BASE_URI" : "https://studyline-cc21ae1829fc.herokuapp.com/api/study_sessions"
-  },
-  "production": {
-    "BASE_URL": "https://your-production-url.com/api/study_sessions"
-  }
-}
